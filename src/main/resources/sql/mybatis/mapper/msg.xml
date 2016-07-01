@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+	<select id="sysdate" resultType="String">
+	select sysdate from dual
+	</select>
+	
+	<select id="msglist" resultType="com.GoalMate.www.DTO.MsgDTO">
+	select * from(
+	select rownum anum,me_num,me_link,me_sender,me_recipient,me_content,me_join,used_sender,used_recipient,recipient_read 
+ 		 from 
+  		(select rownum rnum,me_num,me_link,me_sender,me_recipient,me_content,me_join,used_sender,used_recipient,recipient_read from message where (me_recipient=#{id}) and (used_recipient=0) order by me_join desc)
+  		)where (anum between #{start} and #{end}) 
+	</select>
+	
+	<select id="msglist_count" resultType="Int">
+	select count(*) from message where me_recipient = #{id} and used_recipient=0
+	</select>
+	
+	<select id="msgone" resultType="com.GoalMate.www.DTO.MsgDTO">
+	select * from message where me_num =#{num}
+	</select>
+	
+	<select id="msg_club" resultType="Int">
+	select count(*) from club where club_id=#{ids}
+	</select>
+	
+	<select id="msg_mem" resultType="Int">
+	select count(*) from member where mem_id=#{ids}
+	</select>
+	
+	<update id="msgLinkUpdate">
+	UPDATE message SET me_link = 2 where me_num = #{num}
+	</update>
+	
+	<update id="delUpdate">
+	UPDATE message SET used_recipient = 1 where me_num = #{num}
+	</update>
+	
+	<update id="readUpdate">
+	UPDATE message SET recipient_read = 1 where me_num = #{num}
+	</update>
+	
+	<insert id="msgInsert">
+	INSERT INTO message VALUES (seq_message.nextval,0,#{sender},#{recipient},#{content},sysdate,0,0,0)
+	</insert>
+	
+</mapper>

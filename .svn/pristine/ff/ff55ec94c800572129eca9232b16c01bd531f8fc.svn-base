@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+
+	<select id="bringFreeTotalCount" resultType="int">
+		select count(*) from board_free
+	</select>
+	
+	<select id="bringFreeList" resultType="com.GoalMate.www.DTO.FreeDTO">
+		select rnum,bod_num,bod_title,bod_content,bod_path,bod_id,to_char(bod_date,'yyyy-mm-dd hh24:mi:ss') as bod_date,bod_hits,bod_type
+		from 
+		(select ROWNUM rnum,A.* from 
+		(select * from board_free order by bod_num desc)
+		A where rownum <![CDATA[<]]>= #{endRowNum }) where rnum <![CDATA[>]]>= #{startRowNum }
+	</select>
+	
+	<select id="bringReplyFreeCount" resultType="com.GoalMate.www.DTO.FreeCommenDTO">
+		select bod_num,count(*) as bod_rcount from comment_free group by bod_num order by bod_num desc
+	</select>
+	
+	<insert id="freeWrite">
+		insert into board_free values(seq_bod.nextval,#{bod_title},#{bod_content},'test',#{bod_id},sysdate,0,#{bod_type})
+	</insert>		
+
+	<update id="freeAddHits">
+		update board_free set bod_hits=bod_hits+1 where bod_num=#{bod_num}
+	</update>
+	
+	<select id="bringFreeDetail" resultType="com.GoalMate.www.DTO.FreeDTO">
+		select * from board_free where bod_num=#{bod_num}
+	</select>
+
+	<select id="bringFreeReply" resultType="com.GoalMate.www.DTO.FreeCommenDTO">
+		select cf_num,cf_content,cf_id,to_char(cf_join,'yyyy-mm-dd hh24:mi:ss') as cf_join,bod_num,cf_type from comment_free where bod_num=#{bod_num}
+	</select>
+	
+	<update id="freeBoardModify">
+		update board_free set bod_title=#{bod_title},bod_content=#{bod_content} where bod_num=#{bod_num}
+	</update>
+		
+	<delete id="deleteFreeComment">
+		delete from comment_free where bod_num=#{bod_num}
+	</delete>	
+	
+	<delete id="deleteFree">
+		delete from board_free where bod_num=#{bod_num}
+	</delete>
+
+	<insert id="freeAddReply">
+		insert into comment_free values(seq_cf.nextval,#{cf_content},#{cf_id},sysdate,#{bod_num},#{cf_type})
+	</insert>
+	
+	<delete id="freeDeleteReply">
+		delete from comment_free where cf_num=#{cf_num}
+	</delete>
+
+ 	<update id="freeModifyReply">
+		update comment_free set cf_content=#{cf_content} where cf_num=#{cf_num}
+	</update>	
+
+	<select id="searchFree_subject" resultType="com.GoalMate.www.DTO.FreeDTO">
+		select * from board_free where bod_title like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFree_subject_totalCount" resultType="int">
+		select count(*) from board_free where bod_title like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFree_content" resultType="com.GoalMate.www.DTO.FreeDTO">
+		select * from board_free where bod_content like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFree_content_totalCount" resultType="int">
+		select count(*) from board_free where bod_content like '%'||#{search_content}||'%'
+	</select>
+		
+	<select id="searchFree_sub_cont" resultType="com.GoalMate.www.DTO.FreeDTO">
+		select * from board_free where bod_title like '%'||#{search_content}||'%' or bod_content like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFree_sub_cont_totalCount" resultType="int">
+		select count(*) from board_free where bod_title like '%'||#{search_content}||'%' or bod_content like '%'||#{search_content}||'%'
+	</select>	
+	
+	<select id="searchFree_id" resultType="com.GoalMate.www.DTO.FreeDTO">
+		select * from board_free where bod_id like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFree_id_totalCount" resultType="int">
+		select count(*) from board_free where bod_id like '%'||#{search_content}||'%'
+	</select>	
+	
+				
+</mapper>

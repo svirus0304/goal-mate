@@ -1,0 +1,340 @@
+<%@page import="com.GoalMate.www.DTO.StadiumDTO"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; 
+charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+
+%>
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<style type="text/css">
+h2{text-align: center;}
+.challengRegFormTab{border-collapse: collapse;}
+.index{text-align:center;background-color: lightgray;}
+.items{text-align: center;}
+.submitBtn{font-size: 20px; margin-top: 20px;}
+.homeTr, .awayTr{
+	display:none;
+	/* -webkit-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out; */
+}
+.timeDiv{display: block;width: 250px;}
+.timeDiv input{text-align: center; width: 40px;}
+.timeDiv span{font-size: 13px;}
+input{text-align: center;}
+.textarea{resize:none;width:90%;border:none;}
+.submitBtnDiv{margin:auto;text-align: center;}
+</style>
+<script type="text/javascript">
+function checkAndSub(){
+	var form=document.getElementById('submit');
+	////////////////  hidden Form에 value 자동 입력  ////////////////////////////
+	//mat_date
+	var date=$('select[name=year]').val()+"-"+$('select[name=month]').val()+"-"+$('select[name=day]').val();
+	$('form input[name=mat_date]').prop("value",date);
+	//mat_time
+	var time=$('.timeDiv input[name=sTime_h]').val()+":"+$('.timeDiv input[name=sTime_m]').val()+"~"+
+	$('.timeDiv input[name=eTime_h]').val()+":"+$('.timeDiv input[name=eTime_m]').val();
+	$('form input[name=mat_time]').prop("value",time);
+	//mat_number
+	var number=$('select[name=mat_number]').val();
+	$('form input[name=mat_number]').prop("value",number);
+	//home away
+	if ($('input[name=homeAway]:checked').val()=="home") {//홈일때
+		$('form input[name=mat_home]').prop("value","${clubDTO.club_name}");
+		$('form input[name=mat_away]').prop("value","");
+		//mat_place (경기 장소)
+		var mat_place=$('select[name=mat_place]').val();
+		$('form input[name=mat_place]').prop("value",mat_place);
+		//mat_price
+		var mat_price=$('input[name=mat_price]').val();
+		$('form input[name=mat_price]').prop("value",mat_price);
+	}else if ($('input[name=homeAway]:checked').val()=="away") {//어웨이일떄
+		$('form input[name=mat_home]').prop("value","");
+		$('form input[name=mat_away]').prop("value","${clubDTO.club_name}");
+		//mat_place (희망 지역)
+		var mat_place=$('select[name=area]').val();
+		$('form input[name=mat_place]').prop("value",mat_place);
+	}
+	//mat_content
+	var mat_content=$('textarea[name=content]').val();
+	$('form input[name=mat_content]').prop("value",mat_content);
+	//
+	
+	//--------------------------------------- null check ---------------------------------------------
+	//시간 null
+	if ($('.timeDiv input[name=sTime_h]').val()=="" ||$('.timeDiv input[name=sTime_m]').val()==""||
+			$('.timeDiv input[name=eTime_h]').val()=="" ||$('.timeDiv input[name=eTime_m]').val()=="") {
+		alert("시간을 입력해 주세요.");
+		return;
+	}
+	//시간 23:59 이상
+	if ($('.timeDiv input[name=sTime_h]').val()>23 ||$('.timeDiv input[name=sTime_m]').val()>59||
+			$('.timeDiv input[name=eTime_h]').val()>23 ||$('.timeDiv input[name=eTime_m]').val()>59) {
+		alert("잘못된 시간 양식입니다.");
+		return;
+	}
+	
+	if ($('.timeDiv input[name=sTime_h]').val()>	$('.timeDiv input[name=eTime_h]').val()) {
+		alert("경기시작시각이 종료시각보다 늦을 수는 없습니다.");
+		return;
+	}
+	//경기장소 null
+	if ($('form input[name=mat_home]').prop("value")=="" && $('form input[name=mat_away]').prop("value")=="") {
+		alert("경기 장소를 입력해 주세요.");
+		return;
+	}
+	//매치날이 오늘보다 이르면 return
+	if (new Date(date)<new Date()) {
+		alert("과거에 매치를 잡을 수는 없습니다.");
+		return;
+	}
+	
+	//submit
+	form.submit();
+	
+}//checkAndSub()-----------------------------------------------------------------------------
+
+function maxLengthCheck(object){
+	if (object.value.length>object.maxLength) {
+		object.value=object.value.slice(0,object.maxLength);
+	}
+	/* if (object.value>object.max) { 이상하다.. 나중에 다시 시도
+		alert("object.value : "+object.value+" / object.max : "+object.max);
+	} */
+}//maxLengthCheck()-----------------------------------------------------------------------------
+
+$(document).ready(function(){
+	
+	$('.timeDiv input').prop("maxlength","2");//시간입력 2글자만 되게
+	
+	
+			
+	$(".homeRadio,.awayRadio").click(function(){
+		/* alert($(".homeRadio").prop("checked")+" / "+$(".awayRadio").prop("checked")); */
+		if ($(".homeRadio").prop("checked")==true) {
+			$(".homeTr").show(300);
+			$(".awayTr").hide();
+		}else if($(".awayRadio").prop("checked")==true){
+			$(".homeTr").hide(0);
+			$(".awayTr").show(300);
+		}//if
+	});
+	
+	
+});
+</script>
+<script>
+		function ajax_changeDays(){
+			var month=$("select[name=month]").val();
+			$.get(
+				"ajax_changeDays",
+				{month:month},
+				function(data){
+					alert(data.days);
+					var newDays="";
+					newDays+="<select name='day'>";
+					newDays+="<c:forEach var='fors' items="+data.days+">";
+					newDays+="<c:choose>";
+					newDays+="<c:when test='${fors.equals(date.day)}'>";
+					newDays+="<option value='${fors }' selected='selected'>${fors }</option>";
+					newDays+="</c:when>";
+					newDays+="<c:otherwise>";
+					newDays+="<option value='${fors }'>${fors }</option>";
+					newDays+="</c:otherwise>";
+					newDays+="</c:choose>";
+					newDays+="</c:forEach>";
+					newDays+="</select>";
+					alert(newDays);
+					$("#day2").html(newDays);
+				},
+				"json"
+			);
+		}
+	</script>
+</head>
+<body>
+<h2>매치 등록</h2>
+<table class="challengRegFormTab" width="70%" align="center" border=1>
+	<tr>
+	<!-------------------------------- 날짜 ---------------------------------- -->
+	
+		<td class="index">날짜</td>
+		<td class="items">
+			<select name="year">
+				<option value="${date.year }">${date.year }</option>
+				<option value="${date.year+1 }" >${date.year+1 }</option>
+			</select>
+			<select name="month" onchange="ajax_changeDays();">
+				<c:forEach var="fors" items="${months }" >
+					<c:choose>
+						<c:when test="${fors.equals(date.month)}">
+							<option value="${fors }" selected="selected" onchange="ajax_changeDays(${date.month });">${fors }</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${fors }" onchange="ajax_changeDays(${date.month });">${fors }</option>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+			</select>
+			<div id="day2">
+			<select name="day">
+				<c:forEach var="fors" items="${days }">
+					<c:choose>
+						<c:when test="${fors.equals(date.day)}">
+							<option value="${fors }" selected="selected">${fors }</option>
+						</c:when>
+						<c:otherwise>
+							<option value="${fors }">${fors }</option>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+			</select>
+			</div>
+		</td>
+		<!-------------------------------- 경기시간 ---------------------------------- -->
+		<td class="index">경기시간</td>
+		<td class="items"><div class="timeDiv">
+			<input type="number" name="sTime_h" max=23 maxLength=2 oninput="maxLengthCheck(this);">
+			 : 
+			<input type="number" name="sTime_m" max="59" maxLength=2 oninput="maxLengthCheck(this);">
+			 ~ 
+			<input type="number" name="eTime_h" max="23" maxLength=2 oninput="maxLengthCheck(this);">
+			 : 
+			<input type="number" name="eTime_m" max="59" maxLength=2 oninput="maxLengthCheck(this);">
+			<span class="timeSpan">*24시간단위로 입력해주세요<br>예) 20:00~22:00</span>
+			</div>
+		</td>
+		<!-------------------------------- 인원 ---------------------------------- -->
+		<td class="index">인원</td>
+		<td class="items"><div class="numberDiv">
+			<select name="mat_number">
+				<option value="5:5">5:5</option>
+				<option value="6:6" selected="selected">6:6</option>
+				<option value="7:7">7:7</option>
+			</select>
+			</div>
+		</td>
+	</tr>
+	<tr>
+	<!-------------------------------- 홈/어웨이 ---------------------------------- -->
+		<td class="index">홈/어웨이</td>
+		<td class="items" colspan=5>
+			<span class="homeSpan"><input type="radio" name="homeAway" value="home" class="homeRadio">홈</span>
+			<span class="awaySpan"><input type="radio" name="homeAway" value="away" class="awayRadio">어웨이</span>
+		</td>
+	</tr>
+	<tr class="homeTr">
+		<td class="index"></td>
+		<td class="items" colspan=5>
+		<!-------------------------------- ㄴ홈 ---------------------------------- -->
+			<span>풋살장 : </span>
+			<!-- 중구, 동구, 서구, 남구, 달서구, 달성군, 북구, 수성구 -->
+			<span>
+				<select name="mat_place">
+				<%List<StadiumDTO> stadiumList=(List<StadiumDTO>)request.getAttribute("stadiumList"); %>
+				<option>-------------------- 중구 --------------------</option>
+				<%for(int i=0;i<stadiumList.size();i++){%>
+					<%if(stadiumList.get(i).getSt_area().equals("중구")){%>
+						<option><%=stadiumList.get(i).getSt_name() %></option>
+					<%}//if%>
+				<%}//for%>
+				<option>-------------------- 동구 --------------------</option>
+				<%for(int i=0;i<stadiumList.size();i++){%>
+					<%if(stadiumList.get(i).getSt_area().equals("동구")){%>
+						<option><%=stadiumList.get(i).getSt_name() %></option>
+					<%}//if%>
+				<%}//for%>
+				<option>-------------------- 서구 --------------------</option>
+				<%for(int i=0;i<stadiumList.size();i++){%>
+					<%if(stadiumList.get(i).getSt_area().equals("서구")){%>
+						<option><%=stadiumList.get(i).getSt_name() %></option>
+					<%}//if%>
+				<%}//for%>
+				<option>-------------------- 남구 --------------------</option>
+				<%for(int i=0;i<stadiumList.size();i++){%>
+					<%if(stadiumList.get(i).getSt_area().equals("남구")){%>
+						<option><%=stadiumList.get(i).getSt_name() %></option>
+					<%}//if%>
+				<%}//for%>
+				<option>-------------------- 북구 --------------------</option>
+				<%for(int i=0;i<stadiumList.size();i++){%>
+					<%if(stadiumList.get(i).getSt_area().equals("북구")){%>
+						<option><%=stadiumList.get(i).getSt_name() %></option>
+					<%}//if%>
+				<%}//for%>
+				<option>-------------------- 달서구 --------------------</option>
+				<%for(int i=0;i<stadiumList.size();i++){%>
+					<%if(stadiumList.get(i).getSt_area().equals("달서구")){%>
+						<option><%=stadiumList.get(i).getSt_name()%></option>
+					<%}//if%>
+				<%}//for%>
+				<option>-------------------- 달성군 --------------------</option>
+				<%for(int i=0;i<stadiumList.size();i++){%>
+					<%if(stadiumList.get(i).getSt_area().equals("달성군")){%>
+						<option><%=stadiumList.get(i).getSt_name() %></option>
+					<%}//if%>
+				<%}//for%>
+				<option>-------------------- 수성구 --------------------</option>
+				<%for(int i=0;i<stadiumList.size();i++){%>
+					<%if(stadiumList.get(i).getSt_area().equals("수성구")){%>
+						<option><%=stadiumList.get(i).getSt_name() %></option>
+					<%}//if%>
+				<%}//for%>
+				</select>
+			</span>
+			<span>상대팀 구장비 : </span>
+			<span><input type="number" name="mat_price" style="width:70px;">원</span>
+		</td>
+	</tr>
+	<tr class="awayTr">
+		<td class="index"></td>
+		<td class="items" colspan=5>
+		<!-------------------------------- ㄴ어웨이 ---------------------------------- -->
+			<span>희망지역 : </span>
+			<!-- 중구, 동구, 서구, 남구, 달서구, 달성군, 북구, 수성구 -->
+			<span>
+				<select name="area">
+					<c:forEach var="fors" items="${areas }">
+						<c:choose>
+							<c:when test="${fors.equals(clubDTO.club_area) }">
+								<option value=${fors } selected="selected">${fors }</option>
+							</c:when>
+							<c:otherwise>
+								<option value=${fors }>${fors }</option>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+				</select>
+			</span>
+		</td>
+	</tr>
+	<tr>
+	<!-------------------------------- 남길말 ---------------------------------- -->
+		<td class="index">상대팀에게<br>남기실 말</td>
+		<td class="items" colspan=5>
+			<textarea cols="50" rows="10" name="content" class="textarea" maxlength="250"></textarea>
+		</td>
+	</tr>
+</table>
+<!-------------------------------- 등록 ---------------------------------- -->
+<div class="submitBtnDiv"><button class="submitBtn" onclick="checkAndSub();">등록</button></div>
+
+<!-------------------------------- 히든 폼 ---------------------------------- -->
+<form action="challengeReg" method="post" id="submit">
+	<input type="hidden" name="mat_home" value="">
+	<input type="hidden" name="mat_away" value="">
+	<input type="hidden" name="mat_date" value="">
+	<input type="hidden" name="mat_time" value="">
+	<input type="hidden" name="mat_place" value="">
+	<input type="hidden" name="mat_number" value="">
+	<input type="hidden" name="mat_price" value="0">
+	<input type="hidden" name="mat_content" value="">
+</form>
+</body>
+</html>

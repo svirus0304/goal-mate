@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+	<select id="memIdChecks" resultType="int">
+		select count(*) from member where mem_id=#{mem_id}
+	</select>
+	
+	<select id="clubIdChecks" resultType="int">
+		select count(*) from club where club_id=#{club_id}
+	</select>
+	
+	<select id="clubNameCheck" resultType="int">
+		select count(*) from club where club_name=#{club_name}
+	</select>
+	
+	<insert id="clubJoin">
+		insert into club values(#{club_id},#{club_pw},#{club_area},#{club_area},#{club_name},#{club_path},#{club_type},#{club_phone},#{club_kakao},0,0,0,0,sysdate)
+	</insert>	
+	
+	<select id="bringClubInfo" resultType="com.GoalMate.www.DTO.ClubDTO">
+		select * from club where club_id=#{club_id}
+	</select>
+	
+	<select id="bringClubMemberInfoList" resultType="com.GoalMate.www.DTO.PlayerDTO">
+		select * from view_club_pla where club_id=#{club_id}
+	</select>
+	
+	<delete id="deletePlayers">
+		delete from pla where pl_num=#{deletePlayers}
+	</delete>
+	
+	<insert id="clubMemberAdd">
+		insert into pla values(seq_player.nextval,#{pl_name},#{pl_position},#{pl_increase},#{pl_weight},#{pl_dribble},#{pl_speed},#{club_id})
+	</insert>
+	
+	<update id="clubMemberModify">
+		update pla set pl_name=#{pl_name},pl_position=#{pl_position},pl_increase=#{pl_increase},pl_weight=#{pl_weight},pl_dribble=#{pl_dribble},pl_speed=#{pl_speed} where pl_num=#{pl_num}
+	</update>
+	
+	<select id="clubMemberInfo" resultType="com.GoalMate.www.DTO.PlayerDTO">
+		select * from view_club_pla where pl_num=#{pl_num}
+	</select>
+	
+	<delete id="deletePlayer">
+		delete from pla where pl_num=#{num}
+	</delete>	
+	
+	<update id="changeClubPic">
+		update club set club_path=#{club_path} where club_id=#{club_id}
+	</update>
+	
+	<update id="clubChangePassword">
+		update club set club_pw=#{club_pw} where club_id=#{club_id}
+	</update>
+			
+	<update id="clubChangeInfo">
+		update club set club_name=#{club_name},club_area=#{club_area},club_age=#{club_age},club_type=#{club_type} where club_id=#{club_id}
+	</update>		
+			
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+	
+	<select id="mer_list_page" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	  select mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join
+ 		 from 
+ 		(select rownum rnum,mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join from view_mem_mer)
+  		where rnum between #{start} and #{end}
+	</select>
+	
+	<select id="mer_list_pageAll" resultType="int">
+	select count(*) from view_mem_mer
+	</select>
+	
+	<select id="mer_list_page_area_position_foot" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	  select mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join
+ 		 from 
+ 		(select rownum rnum,mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join from view_mem_mer)
+  		where rnum between #{start} and #{end} and cen_area = #{areas} and cen_position=#{positions} and cen_foot=#{foots}
+	</select>
+	
+	<select id="mer_list_pageAll_area_position_foot" resultType="int">
+	select count(*) from view_mem_mer where cen_area = #{areas} and cen_position=#{positions} and cen_foot=#{foots}
+	</select>
+	
+	<select id="mer_list_page_area_position" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	  select mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join
+ 		 from 
+ 		(select rownum rnum,mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join from view_mem_mer)
+  		where rnum between #{start} and #{end} and cen_area = #{areas} and cen_position=#{positions} 
+	</select>
+	
+	<select id="mer_list_pageAll_area_position" resultType="int">
+	select count(*) from view_mem_mer where cen_area = #{areas} and cen_position=#{positions}
+	</select>
+
+	<select id="mer_list_page_area_foot" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	  select mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join
+ 		 from 
+ 		(select rownum rnum,mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join from view_mem_mer)
+  		where rnum between #{start} and #{end} and cen_area = #{areas} and cen_foot=#{foots} 
+	</select>
+	
+	<select id="mer_list_pageAll_area_foot" resultType="int">
+	select count(*) from view_mem_mer where cen_area = #{areas} and cen_foot=#{foots}
+	</select>
+
+	<select id="mer_list_page_position_foot" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	  select mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join
+ 		 from 
+ 		(select rownum rnum,mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join from view_mem_mer)
+  		where rnum between #{start} and #{end} and cen_position = #{positions} and cen_foot=#{foots} 
+	</select>
+	
+	<select id="mer_list_pageAll_position_foot" resultType="int">
+	select count(*) from view_mem_mer where cen_position = #{positions} and cen_foot=#{foots}
+	</select>
+	
+	<select id="mer_list_page_area" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	  select mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join
+ 		 from 
+ 		(select rownum rnum,mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join from view_mem_mer)
+  		where rnum between #{start} and #{end} and cen_area = #{areas}
+	</select>
+	<select id="mer_list_pageAll_area" resultType="int">
+	select count(*) from view_mem_mer where cen_area = #{areas} 
+	</select>
+	
+	<select id="mer_list_page_position" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	  select mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join
+ 		 from 
+ 		(select rownum rnum,mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join from view_mem_mer)
+  		where rnum between #{start} and #{end} and cen_position = #{positions}
+	</select>
+	
+	<select id="mer_list_pageAll_position" resultType="int">
+	select count(*) from view_mem_mer where cen_position = #{positions} 
+	</select>
+	<select id="mer_one" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	select * from view_mem_mer where mem_id = #{id} 
+	</select>
+	
+	<select id="mer_list_page_foot" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	  select mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join
+ 		 from 
+ 		(select rownum rnum,mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join from view_mem_mer)
+  		where rnum between #{start} and #{end} and cen_foot = #{foots}
+	</select>
+	
+	<select id="mer_list_pageAll_foot" resultType="int">
+	select count(*) from view_mem_mer where cen_foot = #{foots} 
+	</select>
+	<select id="mer_check_id" resultType="int">
+	select count(*) from view_mem_mer where mem_id = #{mem_id} 
+	</select>
+	
+	<select id="mer_detail" resultType="com.GoalMate.www.DTO.MercenaryDTO">
+	  select mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join
+ 		 from 
+ 		(select rownum rnum,mem_id,mem_name,mem_used,mem_path,mem_date,cen_num,cen_area,cen_scope,cen_age,cen_increase,cen_weight,cen_position,cen_foot,cen_date,cen_time,cen_career,cen_content,cen_join from view_mem_mer)
+  		where mem_id = #{mer_id}
+	</select>
+	<insert id="merInsert">
+	INSERT INTO mercenary VALUES (seq_mercenary.nextval,#{mem_id},#{cen_area},#{cen_scope},#{cen_age},#{cen_increase},#{cen_weight},#{cen_position},#{cen_foot},#{cen_date},#{cen_time},#{cen_career},#{cen_content},sysdate)	 
+	</insert>
+	<delete id="merDelete">
+		delete from mercenary where mem_id = #{id}
+	</delete>
+	
+	<update id="merUpdate">
+	UPDATE MERCENARY 
+	SET cen_area = #{cen_area},cen_scope=#{cen_scope},cen_age=#{cen_age},cen_increase=#{cen_increase},cen_weight=#{cen_weight},cen_position=#{cen_position},cen_foot=#{cen_foot},cen_date=#{cen_date},cen_time=#{cen_time},cen_career=#{cen_career},cen_content=#{cen_content},cen_join=sysdate 
+	where mem_id = #{mem_id}
+	</update>
+	
+</mapper>

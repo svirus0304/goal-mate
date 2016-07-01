@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+
+<select id="player_count" resultType="int">
+	select count(*) from pla where club_id=#{club_id} 
+</select>
+
+<select id="rank_list" resultType="com.GoalMate.www.DTO.ClubDTO">
+	select club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+  from (
+	select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+	from club 
+	where(club_win+club_draw+club_lose) &gt;=4 order by (club_win+club_draw+club_lose) desc)
+  where rnum between 1 and 10 order by club_win/(club_win+club_draw+club_lose)*100 desc
+</select> 
+
+
+<select id="rank_list_area" resultType="com.GoalMate.www.DTO.ClubDTO">
+	select club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+  from (
+	select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+	from club 
+	where(club_win+club_draw+club_lose) &gt;=4 order by (club_win+club_draw+club_lose) desc)
+  where rnum between 1 and 10 and club_area=#{areas} order by club_win/(club_win+club_draw+club_lose)*100 desc
+</select> 
+
+<select id="rank_list_age" resultType="com.GoalMate.www.DTO.ClubDTO">
+	select club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+  from (
+	select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+	from club 
+	where(club_win+club_draw+club_lose) &gt;=4 order by (club_win+club_draw+club_lose) desc)
+  where rnum between 1 and 10 and club_age=#{ages} order by club_win/(club_win+club_draw+club_lose)*100 desc
+</select> 
+
+<select id="rank_list_type" resultType="com.GoalMate.www.DTO.ClubDTO">
+	select club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+  from (
+	select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+	from club 
+	where(club_win+club_draw+club_lose) &gt;=4 order by (club_win+club_draw+club_lose) desc)
+  where rnum between 1 and 10 and club_type=#{types} order by club_win/(club_win+club_draw+club_lose)*100 desc
+</select> 
+
+<select id="rank_list_area_type" resultType="com.GoalMate.www.DTO.ClubDTO">
+	select club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+  from (
+	select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+	from club 
+	where(club_win+club_draw+club_lose) &gt;=4 order by (club_win+club_draw+club_lose) desc)
+  where rnum between 1 and 10 and club_area=#{areas} and club_type=#{types} order by club_win/(club_win+club_draw+club_lose)*100 desc
+</select> 
+
+<select id="rank_list_area_age" resultType="com.GoalMate.www.DTO.ClubDTO">
+	select club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+  from (
+	select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+	from club 
+	where(club_win+club_draw+club_lose) &gt;=4 order by (club_win+club_draw+club_lose) desc)
+  where rnum between 1 and 10 and club_area=#{areas} and club_age=#{ages} order by club_win/(club_win+club_draw+club_lose)*100 desc
+</select> 
+
+<select id="rank_list_type_age" resultType="com.GoalMate.www.DTO.ClubDTO">
+	select club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+  from (
+	select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+	from club 
+	where(club_win+club_draw+club_lose) &gt;=4 order by (club_win+club_draw+club_lose) desc)
+  where rnum between 1 and 10 and club_type=#{types} and club_age=#{ages} order by club_win/(club_win+club_draw+club_lose)*100 desc
+</select> 
+
+<select id="rank_list_area_type_age" resultType="com.GoalMate.www.DTO.ClubDTO">
+	select club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+  from (
+	select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+	from club 
+	where(club_win+club_draw+club_lose) &gt;=4 order by (club_win+club_draw+club_lose) desc)
+  where rnum between 1 and 10 and club_area=#{areas} and club_type=#{types} and club_age=#{ages} order by club_win/(club_win+club_draw+club_lose)*100 desc
+</select> 
+
+
+
+</mapper>

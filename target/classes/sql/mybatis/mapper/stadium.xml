@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+	<select id="staList" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium order by st_num
+	</select>
+	
+	<select id="staDetail" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium where st_num = #{st_num}
+	</select>
+	
+	<select id="middle" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium where st_area = #{st_area}
+	</select>
+	
+	<select id="west" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium where st_area = #{st_area}
+	</select>
+	
+	<select id="south" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium where st_area = #{st_area}
+	</select>
+	
+	<select id="dalseo" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium where st_area = #{st_area}
+	</select>
+	
+	<select id="north" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium where st_area = #{st_area}
+	</select>
+	
+	<select id="east" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium where st_area = #{st_area}
+	</select>
+	
+	<select id="dalsung" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium where st_area = #{st_area}
+	</select>
+	
+	<select id="suseong" resultType="com.GoalMate.www.DTO.StadiumDTO">
+		select * from stadium where st_area = #{st_area}
+	</select>
+</mapper>

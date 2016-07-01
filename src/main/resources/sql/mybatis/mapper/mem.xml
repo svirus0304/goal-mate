@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+
+	<select id="memIdCheck" resultType="int">
+		select count(*) from member where mem_id=#{mem_id}
+	</select>
+	
+	<select id="clubIdCheck" resultType="int">
+		select count(*) from club where club_id=#{club_id}
+	</select>
+
+	<insert id="memJoin">
+		insert into member values(#{mem_id},#{mem_pw},#{mem_name},#{mem_used},#{mem_path},sysdate)
+	</insert>
+	
+	<select id="bringMemberInfo" resultType="com.GoalMate.www.DTO.MemDTO">
+		select * from member where mem_id=#{mem_id}
+	</select>
+	
+	<update id="memChangePassword">
+		update member set mem_pw=#{mem_pw} where mem_id=#{mem_id}
+	</update>
+	
+	<update id="changePic">
+		update member set mem_path=#{mem_path} where mem_id=#{mem_id}
+	</update>
+	
+</mapper>

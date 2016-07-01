@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+
+	<select id="bringFindMercenaryTotalCount" resultType="int">
+		select count(*) from board_play
+	</select>
+	
+	<select id="bringFindMercenaryList" resultType="com.GoalMate.www.DTO.FindMercenaryDTO">
+		select rnum,bpl_num,bpl_title,bpl_content,bpl_name,bpl_area,bpl_age,bpl_id,to_char(bpl_date,'yyyy-mm-dd hh24:mi:ss') as bpl_date,bpl_hits,bpl_type
+		from 
+		(select ROWNUM rnum,A.* from 
+		(select * from board_play order by bpl_num desc)
+		A where rownum <![CDATA[<]]>= #{endRowNum }) where rnum <![CDATA[>]]>= #{startRowNum }
+	</select>
+	
+	<select id="bringReplyFindMercenaryCount" resultType="com.GoalMate.www.DTO.MerceCommenDTO">
+		select bpl_num,count(*) as bpl_rcount from comment_play group by bpl_num order by bpl_num desc
+	</select>
+	
+	<insert id="findMercenaryWrite">
+		insert into board_play values(seq_bcl.nextval,#{bpl_title},#{bpl_content},#{bpl_name},#{bpl_area},#{bpl_age},#{bpl_id},sysdate,0,#{bpl_type})
+	</insert>		
+
+	<update id="findMercenaryAddHits">
+		update board_play set bpl_hits=bpl_hits+1 where bpl_num=#{bpl_num}
+	</update>
+	
+	<select id="bringFindMercenaryDetail" resultType="com.GoalMate.www.DTO.FindMercenaryDTO">
+		select * from board_play where bpl_num=#{bpl_num}
+	</select>
+
+	<select id="bringFindMercenaryReply" resultType="com.GoalMate.www.DTO.MerceCommenDTO">
+		select cp_num,cp_content,cp_id,to_char(cp_join,'yyyy-mm-dd hh24:mi:ss') as cp_join,bpl_num,cp_type from comment_play where bpl_num=#{bpl_num}
+	</select>
+	
+	<update id="findMercenaryModify">
+		update board_play set bpl_title=#{bpl_title},bpl_content=#{bpl_content},bpl_name=#{bpl_name},bpl_area=#{bpl_area},bpl_age=#{bpl_age} where bpl_num=#{bpl_num}
+	</update>
+		
+	<delete id="deleteFindMercenaryComment">
+		delete from comment_play where bpl_num=#{bpl_num}
+	</delete>	
+	
+	<delete id="deleteFindMercenary">
+		delete from board_play where bpl_num=#{bpl_num}
+	</delete>
+
+	<insert id="findMercenaryAddReply">
+		insert into comment_play values(seq_cc.nextval,#{cp_content},#{cp_id},sysdate,#{bpl_num},#{cp_type})
+	</insert>
+	
+	<delete id="findMercenaryDeleteReply">
+		delete from comment_play where cp_num=#{cp_num}
+	</delete>
+
+ 	<update id="findMercenaryModifyReply">
+		update comment_play set cp_content=#{cp_content} where cp_num=#{cp_num}
+	</update>	
+
+	<select id="searchFindMercenary_subject" resultType="com.GoalMate.www.DTO.FindMercenaryDTO">
+		select * from board_play where bpl_title like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindMercenary_subject_totalCount" resultType="int">
+		select count(*) from board_play where bpl_title like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindMercenary_content" resultType="com.GoalMate.www.DTO.FindMercenaryDTO">
+		select * from board_play where bpl_content like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindMercenary_content_totalCount" resultType="int">
+		select count(*) from board_play where bpl_content like '%'||#{search_content}||'%'
+	</select>
+		
+	<select id="searchFindMercenary_sub_cont" resultType="com.GoalMate.www.DTO.FindMercenaryDTO">
+		select * from board_play where bpl_title like '%'||#{search_content}||'%' or bpl_content like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindMercenary_sub_cont_totalCount" resultType="int">
+		select count(*) from board_play where bpl_title like '%'||#{search_content}||'%' or bpl_content like '%'||#{search_content}||'%'
+	</select>
+
+	<select id="searchFindMercenary_area" resultType="com.GoalMate.www.DTO.FindMercenaryDTO">
+		select * from board_play where bpl_area like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindMercenary_area_totalCount" resultType="int">
+		select count(*) from board_play where bpl_area like '%'||#{search_content}||'%'
+	</select>
+
+	<select id="searchFindMercenary_age" resultType="com.GoalMate.www.DTO.FindMercenaryDTO">
+		select * from board_play where bpl_age like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindMercenary_age_totalCount" resultType="int">
+		select count(*) from board_play where bpl_age like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindMercenary_id" resultType="com.GoalMate.www.DTO.FindMercenaryDTO">
+		select * from board_play where bpl_id like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindMercenary_id_totalCount" resultType="int">
+		select count(*) from board_play where bpl_id like '%'||#{search_content}||'%'
+	</select>	
+</mapper>

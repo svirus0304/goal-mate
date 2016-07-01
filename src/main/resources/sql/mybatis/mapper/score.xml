@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+
+	<select id="scoreList" resultType="com.GoalMate.www.DTO.Mat_ReDTO">
+		SELECT * FROM mat_re WHERE mat_home IS NOT NULL AND  mat_away IS NOT NULL AND mat_date<![CDATA[<]]>sysdate
+	</select>
+	<select id="mat_reDTO" resultType="com.GoalMate.www.DTO.Mat_ReDTO">
+		SELECT * FROM mat_re WHERE mat_num=#{mat_num}
+	</select>
+	<select id="clubDTO" resultType="com.GoalMate.www.DTO.ClubDTO">
+		SELECT * FROM club WHERE club_name=#{clubName}
+	</select>
+	<update id="scoreConfirm">
+		UPDATE RE SET mat_confirm=1 WHERE MAT_NUM=#{mat_num}
+	</update>
+	<select id="scoreSearch" resultType="com.GoalMate.www.DTO.Mat_ReDTO">
+		SELECT * FROM mat_re WHERE mat_home LIKE '%'||#{name}||'%' OR mat_away LIKE '%'||#{name}||'%' 
+	</select>
+
+	<!-- 
+	<select id="loginCheck" resultType="int"> SELECT count(*) FROM member
+		where member_id = #{member_id} and member_pw = #{member_pw}
+	</select>
+	<select id="prodList" resultType="com.shopping.mall.dto.GoodsDTO"> SELECT * FROM
+		goods
+	</select>
+	<insert id="firstInput"> insert into board
+		values(seq_board.nextval,#{board_name},#{board_pass},
+		#{board_subject},#{board_content},#{board_file},
+		seq_board.currval,0,1,0,sysdate)
+	</insert>
+	<insert id="input"> insert into board
+		values(seq_board.nextval,#{board_name},#{board_pass},
+		#{board_subject},#{board_content},#{board_file},
+		seq_board.currval,0,(select
+		MAX(board_re_seq) from board)+1,0,sysdate)
+	</insert>
+	<update id="readcount">
+		UPDATE board SET board_readcount=board_readcount+1
+		WHERE
+		board_num=#{board_num}
+	</update>
+	<select id="boardView" resultType="com.test.board.dto.BoardDTO">
+		SELECT * FROM board WHERE
+		board_num=#{board_num}
+	</select>
+	<update id="mkRoom4re">
+		UPDATE board SET board_re_seq=board_re_seq+1 WHERE board_re_seq<![CDATA[>]]>#{origSeq}
+	</update>
+	<insert id="reInput"> insert into board
+		values(seq_board.nextval,#{board_name},#{board_pass},
+		#{board_subject},#{board_content},#{board_file},
+		#{board_re_ref},#{board_re_lev},#{board_re_seq},0,sysdate)
+	</insert>
+	<update id="modify"> UPDATE score SET name=#{name},
+		kor=#{kor},eng=#{eng},math=#{math}
+		WHERE stdnum=#{stdnum}
+	</update>
+	<delete id="delete"> DELETE FROM score WHERE
+		stdnum=#{stdnum}
+	</delete> 
+	-->
+
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+
+	<select id="bringFindClubTotalCount" resultType="int">
+		select count(*) from board_club
+	</select>
+	
+	<select id="bringFindClubList" resultType="com.GoalMate.www.DTO.FindClubDTO">
+		select rnum,bcl_num,bcl_title,bcl_content,bcl_name,bcl_area,bcl_age,bcl_id,to_char(bcl_date,'yyyy-mm-dd hh24:mi:ss') as bcl_date,bcl_hits,bcl_type
+		from 
+		(select ROWNUM rnum,A.* from 
+		(select * from board_club order by bcl_num desc)
+		A where rownum <![CDATA[<]]>= #{endRowNum }) where rnum <![CDATA[>]]>= #{startRowNum }
+	</select>
+	
+	<select id="bringReplyFindClubCount" resultType="com.GoalMate.www.DTO.ClubCommenDTO">
+		select bcl_num,count(*) as bcl_rcount from comment_club group by bcl_num order by bcl_num desc
+	</select>
+	
+	<insert id="findClubWrite">
+		insert into board_club values(seq_bcl.nextval,#{bcl_title},#{bcl_content},#{bcl_name},#{bcl_area},#{bcl_age},#{bcl_id},sysdate,0,#{bcl_type})
+	</insert>		
+
+	<update id="findClubAddHits">
+		update board_club set bcl_hits=bcl_hits+1 where bcl_num=#{bcl_num}
+	</update>
+	
+	<select id="bringFindClubDetail" resultType="com.GoalMate.www.DTO.FindClubDTO">
+		select * from board_club where bcl_num=#{bcl_num}
+	</select>
+
+	<select id="bringFindClubReply" resultType="com.GoalMate.www.DTO.ClubCommenDTO">
+		select cc_num,cc_content,cc_id,to_char(cc_join,'yyyy-mm-dd hh24:mi:ss') as cc_join,bcl_num,cc_type from comment_club where bcl_num=#{bcl_num}
+	</select>
+	
+	<update id="findClubModify">
+		update board_club set bcl_title=#{bcl_title},bcl_content=#{bcl_content},bcl_name=#{bcl_name},bcl_area=#{bcl_area},bcl_age=#{bcl_age} where bcl_num=#{bcl_num}
+	</update>
+		
+	<delete id="deleteFindClubComment">
+		delete from comment_club where bcl_num=#{bcl_num}
+	</delete>	
+	
+	<delete id="deleteFindClub">
+		delete from board_club where bcl_num=#{bcl_num}
+	</delete>
+
+	<insert id="findClubAddReply">
+		insert into comment_club values(seq_cc.nextval,#{cc_content},#{cc_id},sysdate,#{bcl_num},#{cc_type})
+	</insert>
+	
+	<delete id="findClubDeleteReply">
+		delete from comment_club where cc_num=#{cc_num}
+	</delete>
+
+ 	<update id="findClubModifyReply">
+		update comment_club set cc_content=#{cc_content} where cc_num=#{cc_num}
+	</update>	
+
+	<select id="searchFindClub_subject" resultType="com.GoalMate.www.DTO.FindClubDTO">
+		select * from board_club where bcl_title like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindClub_subject_totalCount" resultType="int">
+		select count(*) from board_club where bcl_title like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindClub_content" resultType="com.GoalMate.www.DTO.FindClubDTO">
+		select * from board_club where bcl_content like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindClub_content_totalCount" resultType="int">
+		select count(*) from board_club where bcl_content like '%'||#{search_content}||'%'
+	</select>
+		
+	<select id="searchFindClub_sub_cont" resultType="com.GoalMate.www.DTO.FindClubDTO">
+		select * from board_club where bcl_title like '%'||#{search_content}||'%' or bcl_content like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindClub_sub_cont_totalCount" resultType="int">
+		select count(*) from board_club where bcl_title like '%'||#{search_content}||'%' or bcl_content like '%'||#{search_content}||'%'
+	</select>
+
+	<select id="searchFindClub_area" resultType="com.GoalMate.www.DTO.FindClubDTO">
+		select * from board_club where bcl_area like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindClub_area_totalCount" resultType="int">
+		select count(*) from board_club where bcl_area like '%'||#{search_content}||'%'
+	</select>
+
+	<select id="searchFindClub_age" resultType="com.GoalMate.www.DTO.FindClubDTO">
+		select * from board_club where bcl_age like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindClub_age_totalCount" resultType="int">
+		select count(*) from board_club where bcl_age like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindClub_id" resultType="com.GoalMate.www.DTO.FindClubDTO">
+		select * from board_club where bcl_id like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchFindClub_id_totalCount" resultType="int">
+		select count(*) from board_club where bcl_id like '%'||#{search_content}||'%'
+	</select>	
+			
+</mapper>

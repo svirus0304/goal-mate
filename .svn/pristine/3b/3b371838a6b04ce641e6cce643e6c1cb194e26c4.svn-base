@@ -1,0 +1,159 @@
+
+/* CTA */
+.cta .btn-group, .cta .btn-group--opposing, .cta .btn-group--outdent,
+	.cta .btn-group--outdent-opposing {
+	float: none
+}
+.cta {
+	color: #fff;
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%
+}
+@media only screen and (min-width:1044px) {
+	.cta {
+		left: calc(50% - 522px);
+		width: 1044px
+	}
+}
+.cta:before {
+	content: '';
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle
+}
+.cta.cta--opposed {
+	text-align: right
+}
+.cta.cta--center {
+	text-align: center
+}
+.cta_liner {
+	display: inline-block;
+	padding: 20px;
+	vertical-align: middle;
+	width: 80%
+}
+.cta_liner.cta_liner--opposed {
+	text-align: left
+}
+.cta_title {
+	color: #fff;
+	display: inline-block;
+	font-size: 2.6rem;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 3.6rem;
+	margin: 0 0 16px;
+	position: relative
+}
+.cta_title.cta_title--center:after {
+	margin: 5px 0 0;
+	width: 100%
+}
+.cta_title:after {
+	border-bottom-color: #e4ff4c;
+	border-bottom-style: solid;
+	border-bottom-width: 3px;
+	content: '';
+	display: block;
+	margin: 5px 0 0 -30px;
+	width: calc(100% + 30px)
+}
+.cta--hero .cta_title {
+	font-size: 2.4rem;
+	line-height: 2.2rem
+}
+
+.cta--hero .cta_title:after {
+	display: none
+}
+
+.cta--hero .cta_title.cta--light {
+	color: #000
+}
+
+@media only screen and (min-width:1044px) {
+	.cta--hero .cta_title {
+		font-size: 4.5rem;
+		line-height: 4rem
+	}
+}
+
+.cta--hero .cta_eyebrow {
+	font-size: 2.4rem;
+	line-height: 2.2rem
+}
+
+.cta--hero .cta_eyebrow:after {
+	display: none
+}
+
+/* btn-group */
+@media only screen and (min-width:1044px) {
+	[class^=btn-group] .btn {
+		display: inline-block;
+		width: auto;
+		margin: 0 0 0 8px
+	}
+}
+.btn-group, .btn-group--opposing, .btn-group--outdent,
+	.btn-group--outdent-opposing {
+	display: block;
+	float: left;
+	font-size: 0;
+	width: 100%
+}
+@media only screen and (min-width:1044px) {
+	.btn-group, .btn-group--opposing, .btn-group--outdent,
+		.btn-group--outdent-opposing {
+		width: auto
+	}
+}
+.btn-group--opposing, .btn-group--outdent-opposing {
+	float: right
+}
+.btn-group--outdent {
+	margin: 0 0 0 -20px;
+	width: calc(100% + 40px)
+}
+.btn-group--outdent-opposing {
+	margin: 0 -20px 0 0
+}
+
+/* btn-primary */
+.btn--primary {
+  background-color: #d2f311;
+  border-color: #d2f311;
+}
+
+.btn--primary:hover,
+.tile:hover .btn--primary,
+.tile:hover .icon-cta-arrow {
+  background-color: #e4ff4c;
+}
+
+/* btn */
+.btn {
+	font-family:fantasy;
+	font-size: 1.8rem;
+	line-height: 1.8rem;
+	background-color: #d2f311;
+	border: 1px solid #d2f311;
+	color: #181818;
+	display: inline-block;
+	font-weight: 400;
+	margin: 0;
+	padding: 20px 30px;
+	text-decoration: none;
+	position: relative;
+	transition: background-color .15s ease-in-out;
+	z-index: 20;
+	cursor: pointer
+}
+.btn:hover {
+	text-decoration: none;
+}
+

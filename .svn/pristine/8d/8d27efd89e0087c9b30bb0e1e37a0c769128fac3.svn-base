@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+
+	<select id="bringNoticeTotalCount" resultType="int">
+		select count(*) from board_adm
+	</select>
+	
+	<select id="bringNoticeList" resultType="com.GoalMate.www.DTO.NoticeDTO">
+		select rnum,bad_num,bad_title,bad_content,bad_path,bad_id,to_char(bad_date,'yyyy-mm-dd hh24:mi:ss') as bad_date,bad_hits
+		from 
+		(select ROWNUM rnum,A.* from 
+		(select * from board_adm order by bad_num desc)
+		A where rownum <![CDATA[<]]>= #{endRowNum }) where rnum <![CDATA[>]]>= #{startRowNum }
+	</select>
+	
+	<select id="bringReplyCount" resultType="com.GoalMate.www.DTO.NoCommenDTO">
+		select bad_num,count(*) as bad_rcount from comment_adm group by bad_num order by bad_num desc
+	</select>
+	
+	<insert id="noticeWrite">
+		insert into board_adm values(seq_bad.nextval,#{bad_title},#{bad_content},'test','admin',sysdate,0)
+	</insert>
+	
+	<update id="noticeAddHits">
+		update board_adm set bad_hits=bad_hits+1 where bad_num=#{bad_num}
+	</update>	
+	
+	<select id="bringNoticeDetail" resultType="com.GoalMate.www.DTO.NoticeDTO">
+		select * from board_adm where bad_num=#{bad_num}
+	</select>
+	
+	<select id="bringNoticeReply" resultType="com.GoalMate.www.DTO.NoCommenDTO">
+		select ca_num,ca_content,ca_id,to_char(ca_join,'yyyy-mm-dd hh24:mi:ss') as ca_join,bad_num,ca_type from comment_adm where bad_num=#{bad_num}
+	</select>
+	
+	<update id="noticeBoardModify">
+		update board_adm set bad_title=#{bad_title},bad_content=#{bad_content} where bad_num=#{bad_num}
+	</update>
+	
+	<delete id="deleteNoticeComment">
+		delete from comment_adm where bad_num=#{bad_num}
+	</delete>
+	
+	<delete id="deleteNotice">
+		delete from board_adm where bad_num=#{bad_num}
+	</delete>
+
+	<insert id="noticeAddReply">
+		insert into comment_adm values(seq_ca.nextval,#{ca_content},#{ca_id},sysdate,#{bad_num},#{ca_type})
+	</insert>
+		
+	<delete id="noticeDeleteReply">
+		delete from comment_adm where ca_num=#{ca_num}
+	</delete>	
+	
+ 	<update id="noticeModifyReply">
+		update comment_adm set ca_content=#{ca_content} where ca_num=#{ca_num}
+	</update>
+ 
+	<select id="searchNotice_subject" resultType="com.GoalMate.www.DTO.NoticeDTO">
+		select * from board_adm where bad_title like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchNotice_subject_totalCount" resultType="int">
+		select count(*) from board_adm where bad_title like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchNotice_content" resultType="com.GoalMate.www.DTO.NoticeDTO">
+		select * from board_adm where bad_content like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchNotice_content_totalCount" resultType="int">
+		select count(*) from board_adm where bad_content like '%'||#{search_content}||'%'
+	</select>
+		
+	<select id="searchNotice_sub_cont" resultType="com.GoalMate.www.DTO.NoticeDTO">
+		select * from board_adm where bad_title like '%'||#{search_content}||'%' or bad_content like '%'||#{search_content}||'%'
+	</select>
+	
+	<select id="searchNotice_sub_cont_totalCount" resultType="int">
+		select count(*) from board_adm where bad_title like '%'||#{search_content}||'%' or bad_content like '%'||#{search_content}||'%'
+	</select>	
+		
+</mapper>

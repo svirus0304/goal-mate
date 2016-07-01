@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.GoalMate.www.mapper">
+	
+	<select id="club_list" resultType="com.GoalMate.www.DTO.ClubDTO">
+		select * from club
+	</select>
+	 
+	<select id="club_one" resultType="com.GoalMate.www.DTO.ClubDTO">
+		select * from club where club_id = #{club_id}
+	</select> 
+	
+	<select id="club_list_page" resultType="com.GoalMate.www.DTO.ClubDTO">
+		select * from
+ 			(SELECT rownum rnum,club.* FROM club order by club_join)
+		where rnum &gt;= #{start} and rnum &lt;= #{end}
+	</select>
+
+	<select id="club_list_age" resultType="com.GoalMate.www.DTO.ClubDTO">
+		select * from club where club_age=#{age}
+	</select>
+
+	<select id="club_list_age_page" resultType="com.GoalMate.www.DTO.ClubDTO">
+  	 select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+  from 
+  (select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join  from club where club_age=#{age})
+  where rnum between #{start} and #{end}
+	</select>
+	
+	<select id="club_list_club" resultType="com.GoalMate.www.DTO.ClubDTO">
+		select * from club where club_name like '%'||#{finds}||'%'
+	</select>
+	
+	<select id="club_list_club_page" resultType="com.GoalMate.www.DTO.ClubDTO">
+		 select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+ 		 from 
+  		(select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join  from club where club_name like '%'||#{finds}||'%')
+  		where rnum between #{start} and #{end}
+	</select>
+	
+	<select id="club_list_area" resultType="com.GoalMate.www.DTO.ClubDTO">
+		select * from club where club_area like '%'||#{finds}||'%'
+	</select>
+	
+	<select id="club_list_area_page" resultType="com.GoalMate.www.DTO.ClubDTO">
+	 select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join 
+ 		 from 
+  		(select rownum rnum,club_id,club_pw,club_area,club_age,club_name,club_path,club_type,club_phone,club_kakao,club_win,club_draw,club_lose,club_used,club_join  from club where club_area like '%'||#{finds}||'%')
+  		where rnum between #{start} and #{end}
+	</select>
+	
+	<select id="list_player" resultType="com.GoalMate.www.DTO.PlayerDTO">
+		select * from pla where club_id = #{club_id}
+	</select>
+
+
+
+</mapper>
